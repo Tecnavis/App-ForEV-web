@@ -53,7 +53,7 @@
         #markerDetails {
             position: absolute;
             top: 10px;
-            right: 10px;
+            left: 50%;
             background-color: white;
             padding: 10px;
             border-radius: 5px;
@@ -207,7 +207,7 @@
                                 // Perform nearby search for EV stations
                                 var request = {
                                     location: currentLocation,
-                                    radius: 10000, // 10 km radius
+                                    radius: 5000, // 10 km radius
                                     keyword: 'ev station'
                                 };
     
@@ -222,19 +222,27 @@
                                                 title: place.name
                                             });
     
-                                            // Add click event listener to the marker
-                                            marker.addListener('click', function() {
-                                                // Store details of the clicked marker
-                                                var markerDetails = {
+                                         // Add click event listener to the marker
+                                        marker.addListener('click', function() {
+                                            // Store details of the clicked marker
+                                            var markerDetails = {
+                                                name: place.name,
+                                                address: place.vicinity
+                                            };
+                                            // Store all marker details in markerDetailsArray
+                                                markerDetailsArray.push({
                                                     name: place.name,
                                                     address: place.vicinity
-                                                };
-                                                // Push the details to the array
-                                                markerDetailsArray.push(markerDetails);
-                                            });
-    
-                                            markers.push(marker); // Add marker to the array
+                                                });
+
+                                            // Update marker details card
+                                            document.getElementById('markerName').textContent = markerDetails.name;
+                                            document.getElementById('markerAddress').textContent = markerDetails.address;
+
+                                            // Show the marker details card
+                                            document.getElementById('markerDetails').style.display = 'block';
                                         });
+                                    });
                                     }
                                 });
                             });

@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List of EV Stations</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>List of EV Stations</h1>
     <div>
         <p id="startLocation"></p>
         <p id="endLocation"></p>
-        <ul id="markerList"></ul>
+        <div id="markerList"></div>
     </div>
 
     <script>
@@ -21,20 +29,45 @@
         var startLocation = urlParams.get('start');
         var endLocation = urlParams.get('end');
 
+        // If startLocation is null, set it to "Current Location"
+        if (!startLocation) {
+            startLocation = "Current Location";
+        }
+
+        // If endLocation is null, set it to a location within 5 km radius from the current location
+        if (!endLocation) {
+            endLocation = "Within 5 km radius from Current Location";
+        }
+
         // Display start and end locations
         document.getElementById('startLocation').innerText = "Start Location: " + startLocation;
         document.getElementById('endLocation').innerText = "End Location: " + endLocation;
 
         // Retrieve and display marker details
         var markerIndex = 0;
+        var markerList = document.getElementById('markerList');
         while (urlParams.has('marker' + markerIndex + '_name')) {
             var markerName = urlParams.get('marker' + markerIndex + '_name');
             var markerAddress = urlParams.get('marker' + markerIndex + '_address');
 
-            // Display marker details
-            var listItem = document.createElement('li');
-            listItem.innerText = markerName + " - " + markerAddress;
-            document.getElementById('markerList').appendChild(listItem);
+            // Create card for marker
+            var card = document.createElement('div');
+            card.classList.add('card');
+
+            // Create heading for marker name
+            var heading = document.createElement('h3');
+            heading.innerText = markerName;
+
+            // Create paragraph for marker address
+            var addressPara = document.createElement('p');
+            addressPara.innerText = "Address: " + markerAddress;
+
+            // Append heading and paragraph to card
+            card.appendChild(heading);
+            card.appendChild(addressPara);
+
+            // Append card to markerList
+            markerList.appendChild(card);
 
             markerIndex++;
         }
