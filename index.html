@@ -65,6 +65,8 @@
 </head>
 <body>
     <div id="inputs">
+        <input type="range" id="radiusRange" min="1000" max="10000" step="100" value="5000" onchange="updateRangeValue()">
+        <span id="rangeValue">5000</span> meters<br>
         <button id="nearbyEVS">Show the Nearby EV Stations</button><br>
         <p>or</p>
         <input type="text" id="origin-input" placeholder="Enter current location">
@@ -81,6 +83,8 @@
     </div>
 
     <script>
+        var markerDetailsArray = []; // Array to store marker details
+
         function initMap() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
@@ -140,7 +144,11 @@
                             }
                         });
                     }
-    
+                    function updateRangeValue() {
+                    var rangeInput = document.getElementById('radiusRange');
+                    var rangeValueDisplay = document.getElementById('rangeValue');
+                    rangeValueDisplay.textContent = rangeInput.value;
+}
                     function displayEVStationsAlongRoute(path, map) {
                         // Clear existing markers
                         markers.forEach(function(marker) {
@@ -169,13 +177,7 @@
     
                                         // Add click event listener to the marker
                                         marker.addListener('click', function() {
-                                            // Store details of the clicked marker
-                                            var markerDetails = {
-                                                name: place.name,
-                                                address: place.vicinity
-                                            };
-                                            // Push the details to the array
-                                            markerDetailsArray.push(markerDetails);
+                                            handleMarkerClick(marker, place);
                                         });
     
                                         markers.push(marker); // Add marker to the array
@@ -195,7 +197,9 @@
                             marker.setMap(null);
                         });
                         markers = [];
-    
+                        // Retrieve selected radius value from the range input
+                        var radius = document.getElementById('radiusRange').value;
+
                         // Retrieve current location
                         if (navigator.geolocation) {
                             navigator.geolocation.getCurrentPosition(function(position) {
@@ -207,7 +211,7 @@
                                 // Perform nearby search for EV stations
                                 var request = {
                                     location: currentLocation,
-                                    radius: 5000, // 10 km radius
+                                    radius: parseInt(radius), // Convert radius to integer
                                     keyword: 'ev station'
                                 };
     
@@ -222,27 +226,13 @@
                                                 title: place.name
                                             });
     
-                                         // Add click event listener to the marker
-                                        marker.addListener('click', function() {
-                                            // Store details of the clicked marker
-                                            var markerDetails = {
-                                                name: place.name,
-                                                address: place.vicinity
-                                            };
-                                            // Store all marker details in markerDetailsArray
-                                                markerDetailsArray.push({
-                                                    name: place.name,
-                                                    address: place.vicinity
-                                                });
-
-                                            // Update marker details card
-                                            document.getElementById('markerName').textContent = markerDetails.name;
-                                            document.getElementById('markerAddress').textContent = markerDetails.address;
-
-                                            // Show the marker details card
-                                            document.getElementById('markerDetails').style.display = 'block';
+                                            // Add click event listener to the marker
+                                            marker.addListener('click', function() {
+                                                handleMarkerClick(marker, place);
+                                            });
+    
+                                            markers.push(marker); // Add marker to the array
                                         });
-                                    });
                                     }
                                 });
                             });
@@ -250,6 +240,23 @@
                     });
                 });
             }
+        }
+
+        function handleMarkerClick(marker, place) {
+            // Store details of the clicked marker
+            var markerDetails = {
+                name: place.name,
+                address: place.vicinity
+            };
+            // Push the details to the array
+            markerDetailsArray.push(markerDetails);
+
+            // Update marker details card
+            document.getElementById('markerName').textContent = markerDetails.name;
+            document.getElementById('markerAddress').textContent = markerDetails.address;
+
+            // Show the marker details card
+            document.getElementById('markerDetails').style.display = 'block';
         }
     </script>
     
