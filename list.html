@@ -7,52 +7,37 @@
 </head>
 <body>
     <h1>List of EV Stations</h1>
-    <ul id="evStationList"></ul>
+    <div>
+        <p id="startLocation"></p>
+        <p id="endLocation"></p>
+        <ul id="markerList"></ul>
+    </div>
 
     <script>
-        // Function to parse URL parameters
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        };
+        // Retrieve URL parameters
+        var urlParams = new URLSearchParams(window.location.search);
 
-        // Function to display EV stations
-        function displayEVStations() {
-            var start = getUrlParameter('start');
-            var end = getUrlParameter('end');
-            // Here, you can fetch the EV stations based on the start and end locations
-            // For demonstration purposes, I'm displaying the start and end locations
-            var evStations = [
-                {
-                    name: 'EV Station 1',
-                    address: '123 Main St, City',
-                    distance: '1.2 km'
-                },
-                {
-                    name: 'EV Station 2',
-                    address: '456 Elm St, City',
-                    distance: '2.5 km'
-                },
-                // Add more EV station objects as needed
-            ];
+        // Retrieve start and end locations
+        var startLocation = urlParams.get('start');
+        var endLocation = urlParams.get('end');
 
-            var evStationList = document.getElementById('evStationList');
-            evStations.forEach(function(station) {
-                var listItem = document.createElement('li');
-                var stationInfo = `
-                    <h2>${station.name}</h2>
-                    <p>Address: ${station.address}</p>
-                    <p>Distance: ${station.distance}</p>
-                `;
-                listItem.innerHTML = stationInfo;
-                evStationList.appendChild(listItem);
-            });
+        // Display start and end locations
+        document.getElementById('startLocation').innerText = "Start Location: " + startLocation;
+        document.getElementById('endLocation').innerText = "End Location: " + endLocation;
+
+        // Retrieve and display marker details
+        var markerIndex = 0;
+        while (urlParams.has('marker' + markerIndex + '_name')) {
+            var markerName = urlParams.get('marker' + markerIndex + '_name');
+            var markerAddress = urlParams.get('marker' + markerIndex + '_address');
+
+            // Display marker details
+            var listItem = document.createElement('li');
+            listItem.innerText = markerName + " - " + markerAddress;
+            document.getElementById('markerList').appendChild(listItem);
+
+            markerIndex++;
         }
-
-        // Call the function to display EV stations when the page loads
-        window.onload = displayEVStations;
     </script>
 </body>
 </html>
