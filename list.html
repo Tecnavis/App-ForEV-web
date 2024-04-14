@@ -54,6 +54,18 @@
         function displayMarkerDetails() {
             // Retrieve marker details from sessionStorage
             const markerDetails = JSON.parse(sessionStorage.getItem('clickedMarker'));
+            
+            // Retrieve current location from sessionStorage
+            const currentLocation = JSON.parse(sessionStorage.getItem('currentLocation'));
+    
+            // Calculate distance between current location and marker
+            const distance = google.maps.geometry.spherical.computeDistanceBetween(
+                new google.maps.LatLng(currentLocation.lat, currentLocation.lng),
+                new google.maps.LatLng(markerDetails.lat, markerDetails.lng)
+            );
+    
+            // Convert distance to kilometers and round to 2 decimal places
+            const distanceKm = (distance / 1000).toFixed(2);
     
             // Display marker details in the list
             const stationList = document.getElementById('stationList');
@@ -62,13 +74,22 @@
             listItem.innerHTML = `
                 <h3>${markerDetails.name}</h3>
                 <p>${markerDetails.address}</p>
+                <p>Distance from current location: ${distanceKm} km</p>
+                <button onclick="navigateToStation(${markerDetails.lat}, ${markerDetails.lng})">Navigate</button>
             `;
             stationList.appendChild(listItem);
+        }
+    
+        // Function to navigate to the selected station
+        function navigateToStation(lat, lng) {
+            // Redirect to Google Maps with directions to the station
+            window.location.href = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
         }
     
         // Call the function to display marker details when the page loads
         displayMarkerDetails();
     </script>
+    
     
 </body>
 </html>
