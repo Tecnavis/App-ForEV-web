@@ -102,7 +102,6 @@
             <input type="range" id="radiusRange" min="1000" max="15000" step="100" oninput="updateRangeValue()">
             <div class="scroll-value" id="scrollValue">1000</div>
           </div>
-          <input type="text" id="radiusInput" placeholder="Enter radius value" oninput="updateScrollValue()">
         <button id="nearbyEVS">Show the Nearby EV Stations</button><br>
         <p>or</p>
         <input type="text" id="origin-input" placeholder="Enter current location">
@@ -297,7 +296,7 @@
             }
         }
 
-function handleMarkerClick(marker, place) {
+        function handleMarkerClick(marker, place) {
     // Store details of the clicked marker in sessionStorage
     var markerDetails = {
         name: place.name,
@@ -308,6 +307,7 @@ function handleMarkerClick(marker, place) {
     // Redirect to list.html
     window.location.href = 'list.html';
 }
+
     </script>
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARf6Of6YPvTIvQLYECPGGHofzLYxJjN4k&libraries=places&callback=initMap" async defer></script>

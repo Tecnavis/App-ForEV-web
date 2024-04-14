@@ -49,36 +49,26 @@
     <ul class="station-list" id="stationList">
         <!-- List items will be added dynamically -->
     </ul>
-
     <script>
-        // Fetch marker data from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const startLocation = urlParams.get('start');
-        const endLocation = urlParams.get('end');
-        // You can add more parameters as needed
-
-     // Function to retrieve and display marker details from sessionStorage
-function displayMarkerDetails() {
-    // Retrieve marker details from sessionStorage
-    const markerDetails = JSON.parse(sessionStorage.getItem('clickedMarker'));
-
-    // Display marker details in the list
-    const stationList = document.getElementById('stationList');
-    const listItem = document.createElement('li');
-    listItem.classList.add('station-item');
-    listItem.innerHTML = `
-        <h3>${markerDetails.name}</h3>
-        <p>${markerDetails.address}</p>
-    `;
-    stationList.appendChild(listItem);
-}
-
-// Call the function to display marker details when the page loads
-displayMarkerDetails();
-
-
-        // Call the function to display markers when the page loads
-        displayMarkers();
+        // Function to retrieve and display marker details from sessionStorage
+        function displayMarkerDetails() {
+            // Retrieve marker details from sessionStorage
+            const markerDetails = JSON.parse(sessionStorage.getItem('clickedMarker'));
+    
+            // Display marker details in the list
+            const stationList = document.getElementById('stationList');
+            const listItem = document.createElement('li');
+            listItem.classList.add('station-item');
+            listItem.innerHTML = `
+                <h3>${markerDetails.name}</h3>
+                <p>${markerDetails.address}</p>
+            `;
+            stationList.appendChild(listItem);
+        }
+    
+        // Call the function to display marker details when the page loads
+        displayMarkerDetails();
     </script>
+    
 </body>
 </html>
