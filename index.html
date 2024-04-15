@@ -172,12 +172,12 @@
                         title: 'Current Location'
                     });
 
-    
+
                     var directionsService = new google.maps.DirectionsService;
                     var directionsDisplay = new google.maps.DirectionsRenderer({
                         map: map
                     });
-    
+
                     var originInput = document.getElementById('origin-input');
                     var destinationInput = document.getElementById('destination-input');
                     var navigateButton = document.getElementById('navigateButton');
@@ -207,66 +207,66 @@
                         });
                     }
 
-                    function updateRangeValue() {
-                        console.log("Updating range value...");
-                        var range = document.getElementById("radiusRange");
-                        var value = document.getElementById("scrollValue");
-                        value.innerText = range.value;
-                        console.log("New value:", range.value);
-                    }
+                    // function updateRangeValue() {
+                    //     console.log("Updating range value...");
+                    //     var range = document.getElementById("radiusRange");
+                    //     var value = document.getElementById("scrollValue");
+                    //     value.innerText = range.value;
+                    //     console.log("New value:", range.value);
+                    // }
 
-                    function updateScrollValue() {
-                        console.log("Updating scroll value...");
-                        var input = document.getElementById("radiusInput");
-                        var value = document.getElementById("scrollValue");
-                        value.innerText = input.value;
-                        console.log("New value:", input.value);
-                    }
+                    // function updateScrollValue() {
+                    //     console.log("Updating scroll value...");
+                    //     var input = document.getElementById("radiusInput");
+                    //     var value = document.getElementById("scrollValue");
+                    //     value.innerText = input.value;
+                    //     console.log("New value:", input.value);
+                    // }
 
 
                     function displayEVStationsAlongRoute(path) {
                         // Clear existing markers
-                        markers.forEach(function(marker) {
+                        markers.forEach(function (marker) {
                             marker.setMap(null);
                         });
                         markers = [];
-    
+
                         // Loop through the route path and get EV stations within a radius at each point
-                        path.forEach(function(point) {
+                        path.forEach(function (point) {
                             var request = {
                                 location: point,
                                 radius: 50, // 5 m radius
                                 keyword: 'ev station'
                             };
-    
+
                             var service = new google.maps.places.PlacesService(map);
-                            service.nearbySearch(request, function(results, status) {
+                            service.nearbySearch(request, function (results, status) {
                                 if (status === google.maps.places.PlacesServiceStatus.OK) {
-                                    results.forEach(function(place) {
+                                    results.forEach(function (place) {
                                         // Add a marker for each EV station found
                                         var marker = new google.maps.Marker({
                                             map: map,
                                             position: place.geometry.location,
                                             title: place.name
                                         });
-    
+
                                         // Add click event listener to the marker
-                                        marker.addListener('click', function() {
+                                        marker.addListener('click', function () {
                                             handleMarkerClick(marker, place);
                                         });
-    
+
                                         markers.push(marker); // Add marker to the array
                                     });
                                 }
                             });
                         });
                     }
-    
-                    navigateButton.addEventListener('click', function() {
+
+                    navigateButton.addEventListener('click', function () {
                         calculateAndDisplayRoute();
                     });
-    
-                    nearbyEVSButton.addEventListener('click', function() {
+
+                    nearbyEVSButton.addEventListener('click', function () {
                         // Clear existing markers
                         markers.forEach(function (marker) {
                             marker.setMap(null);
@@ -379,6 +379,15 @@
                     service.nearbySearch(request, function (results, status) {
                         if (status === google.maps.places.PlacesServiceStatus.OK) {
                             results.forEach(function (place) {
+                                // Calculate distance between current location and EV station
+                                var distance = google.maps.geometry.spherical.computeDistanceBetween(
+                                    new google.maps.LatLng(currentLocation.lat, currentLocation.lng),
+                                    place.geometry.location
+                                );
+
+                                // Calculate distance in kilometers and round to 2 decimal places
+                                var distanceInKm = (distance / 1000).toFixed(2);
+
                                 // Add a marker for each EV station found
                                 var marker = new google.maps.Marker({
                                     map: map,
@@ -388,7 +397,7 @@
 
                                 // Add click event listener to the marker
                                 marker.addListener('click', function () {
-                                    handleMarkerClick(marker, place);
+                                    handleMarkerClick(marker, place, distanceInKm);
                                 });
 
                                 markers.push(marker); // Add marker to the array
@@ -399,14 +408,14 @@
             }
         }
 
-        function handleMarkerClick(marker, place) {
-            console.log(marker);
+        function handleMarkerClick(marker, place, distanceInKm) {
             // Store details of the clicked marker in sessionStorage
             var markerDetails = {
                 name: place.name,
-                address: place.vicinity
+                address: place.vicinity,
+                distance: distanceInKm
             };
-            sessionStorage.setItem('clickedMarker', JSON.stringify(markerDetails));
+            sessionStorage.setItem('clickedMarker', JSON.stringify(markers));
 
             // Redirect to list.html
             window.location.href = 'list.html';
