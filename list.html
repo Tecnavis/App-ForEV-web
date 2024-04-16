@@ -61,33 +61,45 @@
         // Function to retrieve and display marker details from sessionStorage
         function displayMarkerDetails() {
             // Retrieve marker details array from sessionStorage
-            const markerDetailsArray = JSON.parse(sessionStorage.getItem('clickedMarker'));
+            const markerDetails = JSON.parse(sessionStorage.getItem('clickedMarker'));
 
-            // Check if markerDetailsArray exists and is an array
-            // if (Array.isArray(markerDetailsArray)) {
-                // Clear existing list items
-                const stationList = document.getElementById('stationList');
-                stationList.innerHTML = '';
 
-                // Loop through each marker detail and display it
-                markerDetailsArray.forEach(markerDetails => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('station-item');
-                    listItem.innerHTML = `
+            const stationList = document.getElementById('stationList');
+            stationList.innerHTML = '';
+
+            const listItem = document.createElement('li');
+            listItem.classList.add('station-item');
+            listItem.innerHTML = `
                 <h3>${markerDetails.name}</h3>
                 <p>${markerDetails.address}</p>
                 <p>${markerDetails.distance} KM</p>
             `;
-                    stationList.appendChild(listItem);
-                });
-            // } else {
-            //     console.error("Marker details array not found in sessionStorage or is not an array.");
-            // }
+            stationList.appendChild(listItem);
         }
 
 
         // Call the function to display marker details when the page loads
         displayMarkerDetails();
+
+        function displayAllMarkersDetails() {
+            const markerDetails = JSON.parse(sessionStorage.getItem('markers'));
+            console.log(markerDetails);
+
+
+            // const stationList = document.getElementById('stationList');
+            // stationList.innerHTML = '';
+
+            // const listItem = document.createElement('li');
+            // listItem.classList.add('station-item');
+            // listItem.innerHTML = `
+            //     <h3>${markerDetails.name}</h3>
+            //     <p>${markerDetails.address}</p>
+            //     <p>${markerDetails.distance} KM</p>
+            // `;
+            // stationList.appendChild(listItem);
+        }
+
+        displayAllMarkersDetails()
     </script>
 
 </body>
