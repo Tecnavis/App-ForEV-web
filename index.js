@@ -44,34 +44,34 @@ function initMap() {
                 map: map
             });
 
-            // var originInput = document.getElementById('origin-input');
-            // var destinationInput = document.getElementById('destination-input');
-            // var navigateButton = document.getElementById('navigateButton');
+            var originInput = document.getElementById('origin-input');
+            var destinationInput = document.getElementById('destination-input');
+            var navigateButton = document.getElementById('navigateButton');
             var nearbyEVSButton = document.getElementById('nearbyEVS');
             var radiusInput = document.getElementById('radiusInput');
 
-            // var originAutocomplete = new google.maps.places.Autocomplete(originInput);
-            // var destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput);
+            var originAutocomplete = new google.maps.places.Autocomplete(originInput);
+            var destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput);
 
-            // function calculateAndDisplayRoute() {
-            //     directionsService.route({
-            //         origin: originInput.value,
-            //         destination: destinationInput.value,
-            //         travelMode: 'DRIVING'
-            //     }, function (response, status) {
-            //         if (status === 'OK') {
-            //             directionsDisplay.setDirections(response);
-            //             var start = originInput.value;
-            //             var end = destinationInput.value;
-            //             navigateButton.href = "list.html?start=" + encodeURIComponent(start) + "&end=" + encodeURIComponent(end);
+            function calculateAndDisplayRoute() {
+                directionsService.route({
+                    origin: originInput.value,
+                    destination: destinationInput.value,
+                    travelMode: 'DRIVING'
+                }, function (response, status) {
+                    if (status === 'OK') {
+                        directionsDisplay.setDirections(response);
+                        var start = originInput.value;
+                        var end = destinationInput.value;
+                        navigateButton.href = "list.html?start=" + encodeURIComponent(start) + "&end=" + encodeURIComponent(end);
 
-            //             // Call function to display EV stations along the route
-            //             displayEVStationsAlongRoute(response.routes[0].overview_path);
-            //         } else {
-            //             window.alert('Directions request failed due to ' + status);
-            //         }
-            //     });
-            // }
+                        // Call function to display EV stations along the route
+                        displayEVStationsAlongRoute(response.routes[0].overview_path);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+            }
 
             // function updateRangeValue() {
             //     console.log("Updating range value...");
