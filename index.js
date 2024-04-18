@@ -1,3 +1,5 @@
+
+
 var markerDetailsArray = []; // Array to store marker details
 var map;
 var markers = []; // Array to store markers
